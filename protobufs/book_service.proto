@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+
+message BookRequest {
+    int32 id = 1;
+}
+
+
+message BookListRequest {
+}
+
+
+message BookResponse {
+    int32 id = 1;
+    string name = 2;
+    string author = 3;
+    string uploaded_at = 4;
+}
+
+
+message BookListResponse {
+    repeated BookResponse book = 1;
+}
+
+
+service Books {
+    rpc GetBook (BookRequest) returns (BookResponse);
+    rpc GetBooks (BookListRequest) returns (BookListResponse);
+}

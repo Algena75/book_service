@@ -5,7 +5,8 @@ description = "testwork"
 authors = ["Alex Naumov <algena75@yandex.ru>"]
 readme = "README.md"
 packages = [
-    {include = "web"}
+    {include = "web"},
+    {include = "grpc_service"}
 ]
 
 [tool.poetry.dependencies]
@@ -13,13 +14,18 @@ python = "^3.10"
 fastapi = "0.110.2"
 uvicorn = {version = "0.29.0", extras = ["standard"]}
 pydantic-settings = "2.2.1"
+asyncpg = {version = "0.29.0", extras = ["postgres"]}
 
 
 [tool.poetry.group.web.dependencies]
 sqlalchemy = "2.0.29"
 alembic = "1.13.1"
-asyncpg = {version = "0.29.0", extras = ["postgres"]}
 fastapi-users = {version = "13.0.0", extras = ["sqlalchemy"]}
+
+
+[tool.poetry.group.grps_service.dependencies]
+grpcio-tools = "^1.66.1"
+protobuf = "5.27.2"
 
 [build-system]
 requires = ["poetry-core"]
