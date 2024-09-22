@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     DB_POOL: Pool | None = None
     GRPS_SERVER: str = os.getenv("GRPS_SERVER", 'localhost')
     GRPC_PORT: str | int = os.getenv("GRPC_PORT", 50051)
+    RABBITMQ_USER: str = os.getenv('RABBITMQ_USER', 'user')
+    RABBITMQ_PASSWORD: str = os.getenv('RABBITMQ_PASSWORD', 'password')
+    RABBITMQ_HOST: str = os.getenv('RABBITMQ_HOST', 'localhost')
+    RABBITMQ_PORT: int = int(os.getenv('RABBITMQ_PORT', 5672))
+    RABBITMQ_QUEUE: str = os.getenv('RABBITMQ_QUEUE', 'hello')
 
     class Config:
         env_file = '.env'

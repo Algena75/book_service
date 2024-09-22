@@ -1,12 +1,12 @@
 from datetime import datetime
-from typing import Union
+from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator
 
 
 class BookUpdate(BaseModel):
-    name: Union[str, None] = Field(min_length=1)
-    author: Union[str, None] = Field(min_length=1)
+    name: Optional[str]
+    author: Optional[str]
 
     @field_validator('name', 'author')
     @classmethod
