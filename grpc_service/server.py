@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import asyncpg
 import grpc
@@ -45,7 +46,13 @@ async def main():
         AsyncBookService(), server
     )
     await server.start()
+    logging.info('Сервер запущен.')
     await server.wait_for_termination()
 
 
-asyncio.run(main())
+def start_server():
+    asyncio.run(main())
+
+
+if __name__ == '__main__':
+    start_server()

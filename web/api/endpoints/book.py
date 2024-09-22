@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from web.core.crud import book_crud
 from web.core.db import get_async_session
+from web.core.rabbitmq import send_message_to_broker
 from web.core.user import current_user
 from web.schemas.book import BookCreate, BookRead, BookUpdate
 
@@ -35,6 +36,8 @@ async def create_new_book(
     """Создаёт новую запись о книге."""
     new_book = new_book.model_dump()
     book = await book_crud.create(BookCreate(**new_book), session)
+    await send_message_to_broker(f'Добавлена книга {str(book.dict())}')
+    # print(f'Добавлена книга {str(book)}', book.dict(), str(book.dict()))
     return book
 
 
@@ -61,7 +64,6 @@ async def update_book(
 ) -> Dict:
     """Обновляет ранее созданную запись о книге."""
     data_to_update = data_to_update.model_dump()
-    print(data_to_update)
     data_set = set(data_to_update.values())
     if len(data_set) == 1 and None in data_set:
         raise HTTPException(
@@ -76,6 +78,7 @@ async def update_book(
         )
     book = await book_crud.update(book_to_update,
                                   BookUpdate(**data_to_update), session)
+    await send_message_to_broker(f'Обновлена книга {str(book.dict())}')
     return book
 
 
@@ -93,3 +96,4 @@ async def delete_mem(
             status_code=HTTPStatus.NOT_FOUND,
             detail='Запись о книге не найдена!'
         )
+    await send_message_to_broker(f'Удалена книга id: {id}')
