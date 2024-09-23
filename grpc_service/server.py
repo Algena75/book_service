@@ -5,9 +5,9 @@ import asyncpg
 import grpc
 import grpc.experimental.aio
 
-import grpc_service.book_service_pb2_grpc as book_service_pb2_grpc
-from grpc_service.book_service_pb2 import BookListResponse, BookResponse
-from grpc_service.config import settings
+import book_service_pb2_grpc as book_service_pb2_grpc
+from book_service_pb2 import BookListResponse, BookResponse
+from config import settings
 
 
 class AsyncBookService(book_service_pb2_grpc.BooksServicer):
@@ -41,7 +41,7 @@ class AsyncBookService(book_service_pb2_grpc.BooksServicer):
 async def main():
     grpc.experimental.aio.init_grpc_aio()
     server = grpc.experimental.aio.server()
-    server.add_insecure_port(f"{settings.GRPS_SERVER}:{settings.GRPC_PORT}")
+    server.add_insecure_port(f"[::]:{settings.GRPC_PORT}")
     book_service_pb2_grpc.add_BooksServicer_to_server(
         AsyncBookService(), server
     )

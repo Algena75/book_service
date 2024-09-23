@@ -37,7 +37,6 @@ async def create_new_book(
     new_book = new_book.model_dump()
     book = await book_crud.create(BookCreate(**new_book), session)
     await send_message_to_broker(f'Добавлена книга {str(book.dict())}')
-    # print(f'Добавлена книга {str(book)}', book.dict(), str(book.dict()))
     return book
 
 

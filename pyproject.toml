@@ -4,11 +4,7 @@ version = "0.1.0"
 description = "testwork"
 authors = ["Alex Naumov <algena75@yandex.ru>"]
 readme = "README.md"
-packages = [
-    {include = "web"},
-    {include = "grpc_service"},
-    {include = "rabbit_mq"}
-]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -25,10 +21,14 @@ alembic = "1.13.1"
 fastapi-users = {version = "13.0.0", extras = ["sqlalchemy"]}
 
 
-[tool.poetry.group.grps_service.dependencies]
+[tool.poetry.group.grpc_service.dependencies]
 grpcio-tools = "^1.66.1"
 protobuf = "5.27.2"
 
+
+
+[tool.poetry.group.test.dependencies]
+flake8 = "^7.1.1"
 
 [build-system]
 requires = ["poetry-core"]
