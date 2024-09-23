@@ -1,7 +1,7 @@
 import threading
 
-from grpc_service.server import start_server
-from grpc_service.rabbitmq import main as message_receiver
+from server import start_server
+from rabbitmq import main as message_receiver
 
 
 def main():
