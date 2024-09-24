@@ -10,7 +10,7 @@ from aio_pika.abc import AbstractIncomingMessage
 from config import settings as st
 
 dirname = os.path.dirname(os.path.abspath(sys.argv[0]))
-log_file = os.path.join(dirname, f'logs/log_file.log')
+log_file = os.path.join(dirname, 'logs/log_file.log')
 
 logging.basicConfig(level=logging.INFO)
 
@@ -38,7 +38,7 @@ async def message_receiver() -> None:
     """
     url = (f"amqp://{st.RABBITMQ_USER}:{st.RABBITMQ_PASSWORD}@"
            f"{st.RABBITMQ_HOST}:{st.RABBITMQ_PORT}/")
-    for i in range(1,11):
+    for i in range(1, 11):
         try:
             connection = await connect(url=url)
         except:

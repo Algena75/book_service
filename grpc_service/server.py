@@ -24,7 +24,6 @@ class AsyncBookService(book_service_pb2_grpc.BooksServicer):
         book = BookResponse(**dict_row)
         return book
 
-
     async def GetBooks(self, request, context):
         conn = await asyncpg.connect(**settings.CONNECTION_DATA)
         response = await conn.fetch("""SELECT id, name, author,
