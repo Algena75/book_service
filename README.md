@@ -1,4 +1,6 @@
 # API сервис управления книгами
+![main.yml](https://github.com/Algena75/book_service/actions/workflows/main.yml/badge.svg)
+
 Реализация асинхронного сервиса с микросервисной архитектурой.
 Тестовое задание.
 ## Автор:
