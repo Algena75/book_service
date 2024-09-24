@@ -9,11 +9,11 @@ class Settings(BaseSettings):
     APP_TITLE: str = 'Сервис для управления списком книг'
     APP_DESCRIPTION: str = 'Тестовое задание'
 
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER")
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "postgres")
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "postgres")
     POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER", "localhost")
     POSTGRES_PORT: str | int = os.getenv("POSTGRES_PORT", 5432)
-    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "database")
+    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "postgres")
     DATABASE_URL: str = (f"postgresql+asyncpg://{POSTGRES_USER}:"
                          f"{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:"
                          f"{POSTGRES_PORT}/{POSTGRES_DB}")
