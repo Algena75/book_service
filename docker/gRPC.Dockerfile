@@ -6,6 +6,7 @@ COPY ./pyproject.toml ./poetry.lock ./README.md /app/
 
 COPY ./grpc_service /app/grpc_service
 COPY ./protobufs /app/protobufs
+COPY ./web /app/web
 
 RUN apt update && pip install poetry==1.7.0 \
     && poetry config virtualenvs.create false \

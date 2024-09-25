@@ -7,6 +7,7 @@ COPY ./pyproject.toml ./poetry.lock ./README.md ./alembic.ini /app/
 COPY ./web /app/web
 COPY ./alembic /app/alembic
 COPY ./docker /app
+COPY ./grpc_service /app/grpc_service
 
 RUN apt update && pip install poetry==1.7.0 \
     && poetry config virtualenvs.create false \
