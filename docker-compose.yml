@@ -12,9 +12,10 @@ services:
       - .env.example
 
   web:
-    build:
-      context: .
-      dockerfile: ./docker/web.Dockerfile
+    image: algena75/book_service_web:latest
+    # build:
+    #   context: .
+    #   dockerfile: ./docker/web.Dockerfile
     container_name: web
     entrypoint: ./server-entrypoint.sh
     ports:
@@ -30,9 +31,10 @@ services:
       - ./web:/app/web
 
   grpc_server:
-    build:
-      context: .
-      dockerfile: ./docker/gRPC.Dockerfile
+    image: algena75/book_service_grpc:latest
+    # build:
+    #   context: .
+    #   dockerfile: ./docker/gRPC.Dockerfile
     container_name: grpc_server
     ports:
       - 50051:50051
