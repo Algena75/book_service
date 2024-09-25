@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, UniqueConstraint
 
 from web.core.db import Base
 
@@ -12,6 +12,9 @@ class Book(Base):
     name = Column(String(254), nullable=False)
     author = Column(String(254), nullable=False)
     uploaded_at = Column(DateTime(timezone=True), default=datetime.now)
+    __table_args__ = (
+        UniqueConstraint('name', 'author', name='_unique_pair'),
+    )
 
     def __str__(self):
         return self.name[:30]

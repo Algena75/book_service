@@ -4,6 +4,7 @@ from typing import Dict, List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from web.api.endpoints.validators import validate_new_book
 from web.core.crud import book_crud
 from web.core.db import get_async_session
 from web.core.rabbitmq import send_message_to_broker
@@ -35,6 +36,7 @@ async def create_new_book(
 ) -> Dict:
     """Создаёт новую запись о книге."""
     new_book = new_book.model_dump()
+    await validate_new_book(new_book, session)
     book = await book_crud.create(BookCreate(**new_book), session)
     await send_message_to_broker(f'Добавлена книга {str(book.dict())}')
     return book
@@ -75,6 +77,11 @@ async def update_book(
             status_code=HTTPStatus.NOT_FOUND,
             detail='Книга для изменения не найдена!'
         )
+    data = BookCreate(**(book_to_update.dict())).model_dump()
+    for key in data.keys():
+        if not data_to_update.get(key):
+            data_to_update[key] = data.get[key]
+    await validate_new_book(data_to_update, session)
     book = await book_crud.update(book_to_update,
                                   BookUpdate(**data_to_update), session)
     await send_message_to_broker(f'Обновлена книга {str(book.dict())}')
