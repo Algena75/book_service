@@ -9,7 +9,7 @@ services:
     expose:
       - 5432
     env_file:
-      - .env
+      - .env.example
 
   web:
     build:
@@ -17,14 +17,12 @@ services:
       dockerfile: ./docker/web.Dockerfile
     container_name: web
     entrypoint: ./server-entrypoint.sh
-    # expose:
-    #   - 8000
     ports:
       - 8000:8000
     depends_on:
       - db
     env_file:
-      - .env
+      - .env.example
     environment:
       - POSTGRES_SERVER=db
       - RABBITMQ_HOST=rabbitmq
@@ -42,7 +40,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env
+      - .env.example
     environment:
       - POSTGRES_SERVER=db
       - RABBITMQ_HOST=rabbitmq
@@ -68,10 +66,7 @@ services:
     depends_on:
       - web
     env_file:
-      - .env
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      - .env.example
 
 
 volumes:

@@ -10,7 +10,7 @@ from aio_pika.abc import AbstractIncomingMessage
 from config import settings as st
 
 dirname = os.path.dirname(os.path.abspath(sys.argv[0]))
-log_file = os.path.join(dirname, 'logs/log_file.log')
+log_file = os.path.join(dirname, 'reports/log_file.log')
 
 logging.basicConfig(level=logging.INFO)
 

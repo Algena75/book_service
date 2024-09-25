@@ -1,10 +1,14 @@
 [tool.poetry]
-name = "book-service"
+name = "book_service"
 version = "0.1.0"
 description = "testwork"
 authors = ["Alex Naumov <algena75@yandex.ru>"]
 readme = "README.md"
 
+packages = [
+    { include = "web" },
+    { include = "grpc_service" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"

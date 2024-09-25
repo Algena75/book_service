@@ -20,8 +20,8 @@ class Settings(BaseSettings):
     secret: str = 'SECRET'
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
-    RABBITMQ_USER: str = os.getenv('RABBITMQ_USER', 'user')
-    RABBITMQ_PASSWORD: str = os.getenv('RABBITMQ_PASSWORD', 'password')
+    RABBITMQ_USER: str = os.getenv('RABBITMQ_DEFAULT_USER', 'user')
+    RABBITMQ_PASSWORD: str = os.getenv('RABBITMQ_DEFAULT_PASS', 'password')
     RABBITMQ_HOST: str = os.getenv('RABBITMQ_HOST', 'localhost')
     RABBITMQ_PORT: int = int(os.getenv('RABBITMQ_PORT', 5672))
     RABBITMQ_QUEUE: str = os.getenv('RABBITMQ_QUEUE', 'hello')
