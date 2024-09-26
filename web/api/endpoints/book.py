@@ -4,7 +4,8 @@ from typing import Dict, List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from web.api.endpoints.validators import validate_new_book
+from web.api.endpoints.validators import (validate_book_exist,
+                                          validate_new_book)
 from web.core.crud import book_crud
 from web.core.db import get_async_session
 from web.core.rabbitmq import send_message_to_broker
@@ -47,14 +48,8 @@ async def get_book(
     id: int,
     session: AsyncSession = Depends(get_async_session),
 ) -> BookRead:
-    """Возвращает список книг."""
-    book = await book_crud.get(id, session)
-    if not book:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail='Книга не найдена!'
-        )
-    return book
+    """Возвращает книгy по id."""
+    return await validate_book_exist(id, session)
 
 
 @router.put('/books/{id}', response_model=BookRead)
@@ -71,12 +66,7 @@ async def update_book(
             status_code=HTTPStatus.BAD_REQUEST,
             detail='Нет данных для изменения!'
         )
-    book_to_update = await book_crud.get(id, session)
-    if not book_to_update:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail='Книга для изменения не найдена!'
-        )
+    book_to_update = await validate_book_exist(id, session)
     data = BookCreate(**(book_to_update.dict())).model_dump()
     for key in data.keys():
         if not data_to_update.get(key):
@@ -89,17 +79,11 @@ async def update_book(
 
 
 @router.delete('/books/{id}', status_code=HTTPStatus.NO_CONTENT)
-async def delete_mem(
+async def delete_book(
     id: int,
     session: AsyncSession = Depends(get_async_session),
 ) -> None:
     """Удаляет ранее созданную запись о книге."""
-    book_to_delete = await book_crud.get(obj_in=id, session=session)
-    if book_to_delete:
-        await book_crud.remove(db_obj=book_to_delete, session=session)
-    else:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail='Запись о книге не найдена!'
-        )
+    book_to_delete = await validate_book_exist(id, session)
+    await book_crud.remove(db_obj=book_to_delete, session=session)
     await send_message_to_broker(f'Удалена книга id: {id}')
