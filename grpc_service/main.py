@@ -1,6 +1,6 @@
 import threading
 
-from server import start_server
+from server import main as start_server
 from rabbitmq import main as message_receiver
 
 

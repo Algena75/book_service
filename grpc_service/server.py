@@ -37,7 +37,7 @@ class AsyncBookService(book_service_pb2_grpc.BooksServicer):
         return BookListResponse(book=book_list)
 
 
-async def main():
+async def start_server():
     grpc.experimental.aio.init_grpc_aio()
     server = grpc.experimental.aio.server()
     server.add_insecure_port(f"[::]:{settings.GRPC_PORT}")
@@ -49,9 +49,9 @@ async def main():
     await server.wait_for_termination()
 
 
-def start_server():
-    asyncio.run(main())
+def main():
+    asyncio.run(start_server())
 
 
 if __name__ == '__main__':
-    start_server()
+    main()
