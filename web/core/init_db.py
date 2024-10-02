@@ -1,4 +1,5 @@
 import contextlib
+import os
 
 import asyncpg
 from fastapi_users.exceptions import UserAlreadyExists
@@ -67,6 +68,22 @@ async def create_db_if_not_exists():
             database='template1',
             password='postgres'
         )
+        CREATE_USER_IF_NOT_EXISTS = f"""
+        DO
+        $do$
+        BEGIN
+           IF EXISTS (
+              SELECT FROM pg_catalog.pg_roles
+              WHERE  rolname = '{settings.POSTGRES_USER}') THEN
+              RAISE NOTICE 'Role "{settings.POSTGRES_USER}" is already exists. Skipping.';
+           ELSE
+              CREATE ROLE {settings.POSTGRES_USER} WITH LOGIN SUPERUSER
+                PASSWORD '{settings.POSTGRES_PASSWORD}';
+           END IF;
+        END
+        $do$;"""
+        await connection.execute(CREATE_USER_IF_NOT_EXISTS)
+        print('Пользователь создан!')
         CREATE_DB = f"""
         CREATE DATABASE {settings.POSTGRES_DB}
         OWNER '{settings.POSTGRES_USER}';
@@ -74,4 +91,5 @@ async def create_db_if_not_exists():
         await connection.execute(CREATE_DB)
         print('База создана!')
         await connection.close()
+        os.system('alembic upgrade head')
         await create_db_if_not_exists()

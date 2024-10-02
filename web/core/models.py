@@ -23,7 +23,7 @@ class Book(Base):
         return dict(name=self.name,
                     id=self.id,
                     author=self.author,
-                    uploaded_at=self.uploaded_at)
+                    uploaded_at=self.uploaded_at.date().strftime("%d-%m-%Y"))
 
 
 class User(SQLAlchemyBaseUserTable[int], Base):

@@ -24,7 +24,13 @@ class BookCreate(BookUpdate):
 
 class BookRead(BookCreate):
     id: int
-    uploaded_at: datetime
+    uploaded_at: datetime | str
 
     class Config:
         from_attributes = True
+
+    @field_validator("uploaded_at")
+    def parse_date(cls, value):
+        if isinstance(value, str):
+            return value
+        return value.date().strftime("%d-%m-%Y")

@@ -15,6 +15,7 @@
 * RabbitMQ
 * Asyncio
 * SQLAlchemy + Alembic
+* Redis
 * Pytest
 * Docker
 * Nginx

@@ -10,3 +10,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+
+  redis:
+    restart: unless-stopped
+    image: redis:7.0.5-alpine 
+    ports:
+      - '6379:6379'

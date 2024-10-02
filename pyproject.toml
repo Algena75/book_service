@@ -23,6 +23,7 @@ aio-pika = "^9.4.3"
 sqlalchemy = "2.0.29"
 alembic = "1.13.1"
 fastapi-users = {version = "13.0.0", extras = ["sqlalchemy"]}
+redis = "^5.1.0"
 
 
 [tool.poetry.group.grpc_service.dependencies]

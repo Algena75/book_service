@@ -3,6 +3,8 @@ import json
 import pytest
 from fastapi import status
 from httpx import AsyncClient
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from web.core.models import Book
 
@@ -99,12 +101,14 @@ class TestAPI:
 
 
     async def test_authorized_user_can_delete_book(
-        self, authenticated_client: AsyncClient
+        self, authenticated_client: AsyncClient, async_db: AsyncSession
     ):
         """
         Авторизованный пользователь может удалить запись.
         """
-        response_1 = await authenticated_client.get("/books")
+        response_1 = await async_db.execute(func.count(Book.id))
+        response_1 = response_1.scalar()
         await authenticated_client.delete("/books/1")
-        response_2 = await authenticated_client.get("/books")
-        assert len(response_1.json()) == len(response_2.json()) + 1
+        response_2 = await async_db.execute(func.count(Book.id))
+        response_2 = response_2.scalar()
+        assert response_1 == response_2 + 1

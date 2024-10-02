@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     RABBITMQ_HOST: str = os.getenv('RABBITMQ_HOST', 'localhost')
     RABBITMQ_PORT: int = int(os.getenv('RABBITMQ_PORT', 5672))
     RABBITMQ_QUEUE: str = os.getenv('RABBITMQ_QUEUE', 'hello')
+    REDIS_HOST: str = os.getenv('REDIS_HOST', "localhost")
+    REDIS_PORT: str | int = os.getenv('REDIS_PORT', 6379)
+    LOCAL_REDIS_URL: str = (f"redis://{REDIS_HOST}:{REDIS_PORT}")
+    CACHE_EXPIRE: int = 60
 
     class Config:
         env_file = '.env'
