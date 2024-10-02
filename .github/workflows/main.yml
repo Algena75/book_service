@@ -26,6 +26,12 @@ jobs:
         ports:
           - "5432:5432"
 
+      redis:
+        image: redis
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - "6379:6379"
+
       rabbitmq:
         image: rabbitmq
         env:
@@ -61,6 +67,7 @@ jobs:
     - name: Test with flake8 and pytest
       env:
         DATABASE_URL: 'postgresql+asyncpg://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+        REDIS_PORT: ${{ job.services.redis.ports[6379] }}
         RABBITMQ_PORT: ${{ job.services.rabbitmq.ports[5672] }}
       run: |
         poetry run flake8
