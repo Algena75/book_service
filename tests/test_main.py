@@ -3,7 +3,7 @@ import json
 import pytest
 from fastapi import status
 from httpx import AsyncClient
-from sqlalchemy import func, select
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from web.core.models import Book
@@ -27,7 +27,6 @@ class TestAPI:
         """
         Неавторизованный пользователь не имеет доступа к функциям CRUD.
         """
-        print(client.__dict__)
         response = await getattr(client, endpoint[0])(endpoint[1])
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {"detail": "Unauthorized"}
@@ -36,7 +35,7 @@ class TestAPI:
     @pytest.mark.parametrize("endpoint", [("get", "/books"),
                                           ("get", "/books/1")])
     async def test_authorized_user_can_view_books(
-        self, authenticated_client: AsyncClient, test_book: Book, endpoint
+        self, authenticated_client: AsyncClient, test_book: Book, endpoint,
     ):
         """
         Авторизованный пользователь может просматривать записи.
@@ -108,7 +107,37 @@ class TestAPI:
         """
         response_1 = await async_db.execute(func.count(Book.id))
         response_1 = response_1.scalar()
-        await authenticated_client.delete("/books/1")
+        await authenticated_client.delete("/books/2")
         response_2 = await async_db.execute(func.count(Book.id))
         response_2 = response_2.scalar()
         assert response_1 == response_2 + 1
+
+
+    async def test_safe_methods_use_cache(
+        self, authenticated_client: AsyncClient, redis_client,
+    ):
+        """
+        Безопасные методы используют кеш.
+        """
+        redis_client.delete('get_books_list')
+        redis_client.delete('get_book-id=1')
+        response_1 = await authenticated_client.get("/books")
+        response_2 = await authenticated_client.get("/books/1")
+        assert NEW_BOOK.get("name") in response_1.text
+        assert NEW_BOOK.get("name") in response_2.text
+
+        NEW_BOOK['name'] = 'Cool name for cool book'
+        await authenticated_client.put("/books/1",
+                                       data=json.dumps(NEW_BOOK))
+        response_1 = await authenticated_client.get("/books")
+        response_2 = await authenticated_client.get("/books/1")
+        assert NEW_BOOK.get("name") not in response_1.text
+        assert NEW_BOOK.get("name") not in response_2.text
+
+        redis_client.delete('get_books_list')
+        redis_client.delete('get_book-id=1')
+
+        response_1 = await authenticated_client.get("/books")
+        response_2 = await authenticated_client.get("/books/1")
+        assert NEW_BOOK.get("name") in response_1.text
+        assert NEW_BOOK.get("name") in response_2.text

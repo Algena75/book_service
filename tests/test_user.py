@@ -36,8 +36,9 @@ class TestAuth:
             f'Bearer {new_user_token.json().get("access_token")}'
         )
 
+
     @pytest.mark.parametrize("endpoint", [("get", "/books"),
-                                          ("get", "/books/2")])
+                                          ("get", "/books/1")])
     async def test_new_user_can_get_crud(self, client: AsyncClient, endpoint):
         """
         Пользователь по токену получает доступ к CRUD.

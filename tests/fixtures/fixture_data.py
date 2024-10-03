@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 from web.core.crud import book_crud
 from web.core.db import Base, get_async_session
+from web.core.redis import get_redis_client
 from web.core.user import current_user
 from web.main import app
 from web.schemas.book import BookCreate
@@ -68,9 +69,10 @@ async def client():
 
 
 @pytest.fixture(scope='session')
-async def authenticated_client(client, async_db: AsyncSession):
+async def authenticated_client(client, async_db: AsyncSession, redis_client):
     app.dependency_overrides[current_user] = lambda: authenticated_user
     app.dependency_overrides[get_async_session] = lambda: async_db
+    app.dependency_overrides[get_redis_client] = lambda: redis_client
     return client
 
 
