@@ -21,5 +21,6 @@ except (NameError, ImportError):
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 pytest_plugins = [
-    'tests.fixtures.fixture_data'
+    'tests.fixtures.fixture_data',
+    'tests.fixtures.fixture_redis',
 ]
