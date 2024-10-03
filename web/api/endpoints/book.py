@@ -90,7 +90,7 @@ async def update_book(
     data = BookCreate(**(book_to_update.dict())).model_dump()
     for key in data.keys():
         if not data_to_update.get(key):
-            data_to_update[key] = data.get[key]
+            data_to_update[key] = data.get(key)
     await validate_new_book(data_to_update, session)
     book = await book_crud.update(book_to_update,
                                   BookUpdate(**data_to_update), session)

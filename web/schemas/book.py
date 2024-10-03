@@ -5,8 +5,8 @@ from pydantic import BaseModel, field_validator
 
 
 class BookUpdate(BaseModel):
-    name: Optional[str]
-    author: Optional[str]
+    name: Optional[str] = None
+    author: Optional[str] = None
 
     @field_validator('name', 'author')
     @classmethod
