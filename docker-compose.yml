@@ -9,7 +9,7 @@ services:
     expose:
       - 5432
     env_file:
-      - .env.example
+      - .env
 
   web:
     image: algena75/book_service_web:latest
@@ -24,7 +24,7 @@ services:
       - db
       - redis
     env_file:
-      - .env.example
+      - .env
     environment:
       - POSTGRES_SERVER=db
       - RABBITMQ_HOST=rabbitmq
@@ -44,7 +44,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env.example
+      - .env
     environment:
       - POSTGRES_SERVER=db
       - RABBITMQ_HOST=rabbitmq
@@ -70,7 +70,7 @@ services:
     depends_on:
       - web
     env_file:
-      - .env.example
+      - .env
 
   redis:
     restart: unless-stopped
